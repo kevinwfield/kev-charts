@@ -1,0 +1,19 @@
+{
+  "name": "kev-charts",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "localtunnel": "^2.0.2",
+    "puppeteer-core": "^23.11.1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
