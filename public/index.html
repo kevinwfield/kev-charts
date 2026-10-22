@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0e1117"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><title>Kev Charts</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;height:100%;background:#0e1117;color:#d1d4dc;font:14px -apple-system,system-ui,Segoe UI,Roboto,sans-serif;overflow:hidden}
+#app{display:flex;height:100%;padding-top:env(safe-area-inset-top)}#main{flex:1;display:flex;flex-direction:column;min-width:0}
+header{display:flex;align-items:center;gap:6px;padding:6px 8px;border-bottom:1px solid #222631}
+#symBtn{font-weight:700;font-size:16px;background:none;border:0;color:#fff;padding:6px 4px}#price{font-size:13px}
+.up{color:#26a69a}.dn{color:#ef5350}.sp{flex:1}
+button.b{background:#1e222d;color:#d1d4dc;border:1px solid #2a2e39;border-radius:8px;padding:8px 10px;font-size:13px;min-width:38px}
+button.b.on{background:#2962ff;border-color:#2962ff;color:#fff}
+#tfs{display:flex;gap:4px;padding:6px 8px;overflow-x:auto;border-bottom:1px solid #222631}#tfs button{flex:1}
+#charts{flex:1;position:relative;display:flex;flex-direction:column;min-height:0}#c1{flex:3;position:relative;min-height:0}#c2{flex:1;position:relative;min-height:0;border-top:1px solid #222631}
+#ovl{position:absolute;left:0;top:0;width:100%;height:100%;overflow:hidden;pointer-events:none;z-index:5;touch-action:none}#ovl.draw{pointer-events:auto;cursor:crosshair;touch-action:none}
+#ovl .h{pointer-events:auto;touch-action:none;cursor:move}
+#legend{position:absolute;left:6px;top:4px;z-index:6;font-size:11px;pointer-events:none;line-height:1.5}
+#legend2{position:absolute;left:6px;top:2px;z-index:6;font-size:11px;pointer-events:none}
+#status{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:7;pointer-events:none;color:#888}
+#side{width:300px;border-left:1px solid #222631;display:flex;flex-direction:column;background:#131722}
+#side h3{margin:0;padding:10px;font-size:14px;display:flex;align-items:center;gap:6px}
+#wl{flex:1;overflow:auto}.row{display:flex;align-items:center;padding:12px 10px;border-bottom:1px solid #1e222d;gap:6px}.row.act{background:#1e2433}
+.row .s{flex:1;font-weight:600}.row .p{text-align:right;min-width:80px}.row .c{text-align:right;min-width:62px}.row .x{background:none;border:0;color:#666;font-size:18px;padding:0 4px}
+#addf{display:flex;gap:6px;padding:8px;border-top:1px solid #222631}#addf input{flex:1;background:#0e1117;border:1px solid #2a2e39;color:#fff;border-radius:8px;padding:9px;font-size:16px}
+#fibbar{display:none;position:absolute;right:8px;top:8px;z-index:8;gap:6px}#fibbar.show{display:flex}
+#hint{position:absolute;left:50%;transform:translateX(-50%);bottom:8px;z-index:8;background:#2962ffcc;color:#fff;padding:6px 10px;border-radius:8px;font-size:12px;display:none}
+dialog{background:#1e222d;color:#d1d4dc;border:1px solid #2a2e39;border-radius:12px;width:min(92vw,380px)}dialog::backdrop{background:#0008}
+dialog .r{display:flex;gap:6px;margin:8px 0;align-items:center}dialog select,dialog input{background:#0e1117;color:#fff;border:1px solid #2a2e39;border-radius:6px;padding:8px;font-size:16px}dialog input[type=number]{width:70px}dialog input[type=color]{width:44px;padding:2px;height:38px}
+@media (max-width:820px){#side{position:fixed;inset:auto 0 0 0;width:auto;height:70%;transform:translateY(100%);transition:transform .2s;z-index:20;border-radius:14px 14px 0 0;border:1px solid #2a2e39;padding-bottom:env(safe-area-inset-bottom)}#side.open{transform:none}}
+@media (min-width:821px){#wlBtn{display:none}}
+</style></head><body><div id="app"><div id="main">
+<header><button id="symBtn">XMRUSDT ▾</button><span id="price"></span><span class="sp"></span>
+<button class="b" id="fibBtn" title="Fib retracement">Fib</button><button class="b" id="maBtn" title="Indicator settings">⚙</button><button class="b" id="wlBtn">☰</button></header>
+<div id="tfs"></div>
+<div id="charts"><div id="c1"><div id="legend"></div><svg id="ovl"></svg><div id="fibbar"><button class="b" id="fibDel">Delete fib</button><button class="b" id="fibClr">Clear all</button></div><div id="hint">Drag from swing high to swing low (or tap twice)</div></div>
+<div id="c2"><div id="legend2"></div></div><div id="status">Loading…</div></div>
+</div>
+<aside id="side"><h3>Watchlist<span class="sp"></span><button class="b" id="wlClose">✕</button></h3><div id="wl"></div>
+<form id="addf"><input id="addIn" placeholder="Add: BTCUSDT, GOLD, EURUSD, TSLA" autocapitalize="characters" autocomplete="off"><button class="b">Add</button></form></aside></div>
+<dialog id="dlg"><b>Moving averages</b><div id="maRows"></div><b>Stoch RSI</b><div class="r">RSI <input type="number" id="sR"> Stoch <input type="number" id="sS"> K <input type="number" id="sK"> D <input type="number" id="sD"></div>
+<div class="r"><span class="sp"></span><button class="b" id="dReset">Defaults</button><button class="b on" id="dOk">Save</button></div></dialog>
+<script src="lwc.js"></script><script src="ind.js"></script><script src="app.js"></script></body></html>
